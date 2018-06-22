@@ -5,21 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Player Server</title>
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+    <style>
+    .centeredVideo {
+        display: block;
+        width: 100%;
+        height: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: auto;
+    }
+    </style>
 </head>
 <body>
-    <script src="https://cdn.bootcss.com/flv.js/1.4.0/flv.min.js"></script>
-    <video id="videoElement"></video>
+    <nav class="green darken-3" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">FIFA FLORA 2018</a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="#">IT Flora</a></li>
+          </ul>
+
+          <ul id="nav-mobile" class="sidenav">
+            <li><a href="#">IT Flora</a></li>
+          </ul>
+          <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
+    <div class="section no-pad-bot">
+      <div class="container">
+        <br><br>
+        <video id="videoElement" class="centeredVideo" controls></video>
+        <div class="row">
+            <div class="s12 xl12">
+                <div class="card-panel center-align">
+                    <div id="quotes"></div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flv.js/1.4.2/flv.min.js"></script>
     <script>
-        if (flvjs.isSupported()) {
-            var videoElement = document.getElementById('videoElement');
-            var flvPlayer = flvjs.createPlayer({
+        $(document).ready(function() {
+
+            randomQuote();
+
+            if (flvjs.isSupported()) {
+              var videoElement = document.getElementById('videoElement');
+              var flvPlayer = flvjs.createPlayer({
                 type: 'flv',
-                url: 'http://190.190.190.150:8800/live/TEST.flv'
-            });
-            flvPlayer.attachMediaElement(videoElement);
-            flvPlayer.load();
-            flvPlayer.play();
+                url: 'http://190.190.190.11:8800/live/fifa2018.flv'
+              });
+              flvPlayer.attachMediaElement(videoElement);
+              flvPlayer.load();
+              flvPlayer.play();
+            }
+        });
+
+        function randomQuote() {
+              $.ajax({
+                  url: "https://api.forismatic.com/api/1.0/?",
+                  dataType: "jsonp",
+                  data: "method=getQuote&format=jsonp&lang=en&jsonp=?",
+                  success: function( response ) {
+                    $("#quotes").html('"' + response.quoteText + '"' + "<br/>&dash; " + response.quoteAuthor + " &dash;");
+                  }
+              });
         }
+
     </script>
 </body>
 </html>
